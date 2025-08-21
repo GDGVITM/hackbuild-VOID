@@ -5,13 +5,10 @@ import os
 import time
 import json
 from dotenv import load_dotenv
-from datetime import datetime, timezone, timedelta
-import pytz
+from analysis import get_indian_timestamp, call_gemini_api, extract_disaster_info
 
 load_dotenv()
 
-api_key = os.getenv('GEMINI_API_KEY')
-client = genai.Client(api_key=api_key)
 reddit = praw.Reddit(
     client_id=os.getenv('YOUR_CLIENT_ID'),
     client_secret=os.getenv('YOUR_CLIENT_SECRET'),
@@ -44,70 +41,30 @@ except Exception as e:
 
 subreddit_name = 'disasterhazards'
 
-def get_indian_timestamp(submission):
-    ist = pytz.timezone('Asia/Kolkata')
-    post_time_utc = datetime.fromtimestamp(submission.created_utc, tz=timezone.utc)
-    post_time_ist = post_time_utc.astimezone(ist)
-    
-    return {
-        'utc_timestamp': submission.created_utc,
-        'utc_datetime': post_time_utc.strftime('%Y-%m-%d %H:%M:%S UTC'),
-        'ist_datetime': post_time_ist.strftime('%Y-%m-%d %H:%M:%S IST'),
-        'ist_date': post_time_ist.strftime('%Y-%m-%d'),
-        'ist_time': post_time_ist.strftime('%H:%M:%S'),
-        'day_of_week': post_time_ist.strftime('%A'),
-        'formatted_ist': post_time_ist.strftime('%d %B %Y, %I:%M %p IST')
-    }
-
-def call_gemini_api(text, system_instruction, model_name="gemini-2.5-flash"):
-    contents = [
-        types.Content(
-            role="user",
-            parts=[
-                types.Part.from_text(text=text),
-            ],
-        ),
-    ]
-    generate_content_config = types.GenerateContentConfig(
-        system_instruction=[
-            types.Part.from_text(text=system_instruction),
-        ],
-    )
-    
-    try:
-        response_chunks = []
-        for chunk in client.models.generate_content_stream(
-            model=model_name,
-            contents=contents,
-            config=generate_content_config,
-        ):
-            response_chunks.append(chunk.text)
-        
-        response_text = ''.join(response_chunks).strip()
-        
-        if response_text.startswith('```json'):
-            response_text = response_text.replace('```json', '').replace('```', '').strip()
-        elif response_text.startswith('```'):
-            response_text = response_text.replace('```', '').strip()
-            
-        return json.loads(response_text)
-    except Exception as e:
-        print(f"Error calling Gemini API: {e}")
-        return None
-
 def check_post_moderation(text):
     system_instruction = """You are a content moderator for a disaster hazards subreddit. Analyze posts and return JSON with these fields:
-- city: true if mentions a specific city name, false otherwise
+- city: true if mentions ANY specific geographic place name (city, town, village, district, state, region, landmark), false otherwise
 - location: true if mentions any location/place (village, state, country, etc.), false otherwise
 - promoting: true if promotes brands/products/services/businesses/companies/advertisements, false otherwise
 
 Examples:
 - 'Dharali Village, Uttarakhand' -> {"city": true, "location": true, "promoting": false}
 - 'Flood in Mumbai today' -> {"city": true, "location": true, "promoting": false}
+- 'Wayanad Landslides (Kerala, India)' -> {"city": true, "location": true, "promoting": false}
+- 'Oregon (Doerner Fir Tree in Danger)' -> {"city": true, "location": true, "promoting": false}
+- 'California wildfire spreading' -> {"city": true, "location": true, "promoting": false}
+- 'Texas storm approaching' -> {"city": true, "location": true, "promoting": false}
+- 'Earthquake in Tokyo yesterday' -> {"city": true, "location": true, "promoting": false}
+- 'Disaster in northern region' -> {"city": false, "location": true, "promoting": false}
 - 'Join our coaching classes' -> {"city": false, "location": false, "promoting": true}
 - 'Buy our insurance product' -> {"city": false, "location": false, "promoting": true}
 
-Note: Geographic locations, villages, cities, states are NOT promotional content.
+IMPORTANT: 
+- State names (Oregon, California, Texas, Kerala, etc.) COUNT as cities for this purpose
+- District names (Wayanad, etc.) COUNT as cities
+- Any proper noun place name should be marked as city: true
+- Only reject if there's NO specific place name at all (like "somewhere in north" or "general area")
+- Geographic locations, villages, cities, states are NOT promotional content.
 Only flag as promoting if it advertises businesses, products, or services.
 Return only valid JSON, no markdown formatting."""
     
@@ -115,45 +72,6 @@ Return only valid JSON, no markdown formatting."""
     if result:
         return result.get('city', False), result.get('location', False), result.get('promoting', False)
     return False, False, True
-
-def extract_disaster_info(text, submission):
-    system_instruction = """You are a disaster intelligence analyst. Extract detailed information from disaster-related posts and return JSON with these fields:
-- place: The most specific location mentioned (format: 'City, Country' or 'Village, State, Country')
-- region: The continental region (asia, europe, north_america, south_america, africa, oceania, antarctica)
-- disaster_type: Type of disaster (earthquake, flood, fire, hurricane, tornado, landslide, tsunami, drought, cyclone, storm, etc.)
-- country: The country name if mentioned
-- state_province: The state or province if mentioned
-- city: The city or village name if mentioned
-
-Examples:
-- 'Flood in Mumbai today' -> {"place": "Mumbai, India", "region": "asia", "disaster_type": "flood", "country": "India", "state_province": "Maharashtra", "city": "Mumbai"}
-- 'Earthquake hit Tokyo yesterday' -> {"place": "Tokyo, Japan", "region": "asia", "disaster_type": "earthquake", "country": "Japan", "state_province": "Tokyo", "city": "Tokyo"}
-- 'Forest fire spreading in California right now' -> {"place": "California, USA", "region": "north_america", "disaster_type": "fire", "country": "USA", "state_province": "California", "city": ""}
-
-Return only valid JSON, no markdown formatting."""
-    
-    result = call_gemini_api(f"Disaster text to analyze: {text}", system_instruction)
-    timestamp_info = get_indian_timestamp(submission)
-    
-    if result:
-        return {
-            'place': result.get('place', 'Unknown'),
-            'region': result.get('region', 'unknown'),
-            'disaster_type': result.get('disaster_type', 'unknown'),
-            'country': result.get('country', 'Unknown'),
-            'state_province': result.get('state_province', 'Unknown'),
-            'city': result.get('city', 'Unknown'),
-            'timestamp_info': timestamp_info
-        }
-    return {
-        'place': 'Unknown',
-        'region': 'unknown', 
-        'disaster_type': 'unknown',
-        'country': 'Unknown',
-        'state_province': 'Unknown',
-        'city': 'Unknown',
-        'timestamp_info': timestamp_info
-    }
 
 print(f"\nStarting auto-moderation for r/{subreddit_name}")
 print("Checking existing unmoderated posts first...")
@@ -173,8 +91,6 @@ try:
         
         timestamp_info = get_indian_timestamp(submission)
         print(f"Posted: {timestamp_info['formatted_ist']}")
-        print(f"Date: {timestamp_info['ist_date']} ({timestamp_info['day_of_week']})")
-        print(f"Time: {timestamp_info['ist_time']} IST")
         
         content = submission.title + " " + (submission.selftext or "")
         has_city, has_location, is_promo = check_post_moderation(content)
@@ -208,14 +124,26 @@ try:
             
             disaster_info = extract_disaster_info(content, submission)
             print(f"Place: {disaster_info['place']}")
-            print(f"Country: {disaster_info['country']}")
-            print(f"State/Province: {disaster_info['state_province']}")
-            print(f"City: {disaster_info['city']}")
             print(f"Region: {disaster_info['region']}")
             print(f"Disaster Type: {disaster_info['disaster_type']}")
-            print(f"Post Timestamp: {disaster_info['timestamp_info']['formatted_ist']}")
+            print(f"Urgency Level: {disaster_info['urgency_level']}/3")
+            print(f"Confidence Level: {disaster_info['confidence_level']}/10")
+            if disaster_info['sources']:
+                print(f"Sources: {', '.join(disaster_info['sources'])}")
+            else:
+                print("Sources: No additional sources found")
             
-            submission.mod.approve()
+            # Check confidence level - remove if 4 or below
+            if disaster_info['confidence_level'] <= 4:
+                print(f"REJECTED: Low confidence level ({disaster_info['confidence_level']}/10)")
+                removal_message = f"Your post was removed due to low credibility score ({disaster_info['confidence_level']}/10). Unable to verify the disaster information from reliable sources."
+                submission.mod.remove()
+                submission.mod.send_removal_message(
+                    message=removal_message,
+                    type="public"
+                )
+            else:
+                submission.mod.approve()
             
         time.sleep(2)
         
@@ -232,8 +160,6 @@ for submission in reddit.subreddit(subreddit_name).stream.submissions(skip_exist
     
     timestamp_info = get_indian_timestamp(submission)
     print(f"Posted: {timestamp_info['formatted_ist']}")
-    print(f"Date: {timestamp_info['ist_date']} ({timestamp_info['day_of_week']})")
-    print(f"Time: {timestamp_info['ist_time']} IST")
     
     content = submission.title + " " + (submission.selftext or "")
     has_city, has_location, is_promo = check_post_moderation(content)
@@ -267,13 +193,25 @@ for submission in reddit.subreddit(subreddit_name).stream.submissions(skip_exist
         
         disaster_info = extract_disaster_info(content, submission)
         print(f"Place: {disaster_info['place']}")
-        print(f"Country: {disaster_info['country']}")
-        print(f"State/Province: {disaster_info['state_province']}")
-        print(f"City: {disaster_info['city']}")
         print(f"Region: {disaster_info['region']}")
         print(f"Disaster Type: {disaster_info['disaster_type']}")
-        print(f"Post Timestamp: {disaster_info['timestamp_info']['formatted_ist']}")
+        print(f"Urgency Level: {disaster_info['urgency_level']}/3")
+        print(f"Confidence Level: {disaster_info['confidence_level']}/10")
+        if disaster_info['sources']:
+            print(f"Sources: {', '.join(disaster_info['sources'])}")
+        else:
+            print("Sources: No additional sources found")
         
-        submission.mod.approve()
+        # Check confidence level - remove if 4 or below
+        if disaster_info['confidence_level'] <= 4:
+            print(f"REJECTED: Low confidence level ({disaster_info['confidence_level']}/10)")
+            removal_message = f"Your post was removed due to low credibility score ({disaster_info['confidence_level']}/10). Unable to verify the disaster information from reliable sources."
+            submission.mod.remove()
+            submission.mod.send_removal_message(
+                message=removal_message,
+                type="public"
+            )
+        else:
+            submission.mod.approve()
         
     time.sleep(1)
