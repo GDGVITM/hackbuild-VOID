@@ -123,6 +123,8 @@ try:
             print(f"APPROVED: Post meets all criteria")
             
             disaster_info = extract_disaster_info(content, submission)
+            print(f"DEBUG: disaster_info keys: {list(disaster_info.keys())}")
+            print(f"DEBUG: disaster_type value: '{disaster_info.get('disaster_type', 'MISSING')}'")
             print(f"Place: {disaster_info['place']}")
             print(f"Region: {disaster_info['region']}")
             print(f"Disaster Type: {disaster_info['disaster_type']}")
