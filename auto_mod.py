@@ -97,17 +97,23 @@ def call_gemini_api(text, system_instruction, model_name="gemini-2.5-flash"):
 
 def check_post_moderation(text):
     system_instruction = """You are a content moderator for a disaster hazards subreddit. Analyze posts and return JSON with these fields:
-- city: true if mentions a specific city name, false otherwise
+- city: true if mentions a specific city, town, village, district, or any named populated place, false otherwise
 - location: true if mentions any location/place (village, state, country, etc.), false otherwise
 - promoting: true if promotes brands/products/services/businesses/companies/advertisements, false otherwise
 
 Examples:
 - 'Dharali Village, Uttarakhand' -> {"city": true, "location": true, "promoting": false}
 - 'Flood in Mumbai today' -> {"city": true, "location": true, "promoting": false}
+- 'Wayanad Landslides (Kerala, India)' -> {"city": true, "location": true, "promoting": false}
+- 'Earthquake in Tokyo yesterday' -> {"city": true, "location": true, "promoting": false}
+- 'Disaster in northern region' -> {"city": false, "location": true, "promoting": false}
 - 'Join our coaching classes' -> {"city": false, "location": false, "promoting": true}
 - 'Buy our insurance product' -> {"city": false, "location": false, "promoting": true}
 
-Note: Geographic locations, villages, cities, states are NOT promotional content.
+IMPORTANT: 
+- Wayanad, Mumbai, Tokyo, Delhi, Chennai, Kolkata, districts, towns, villages are ALL considered cities
+- Any specific named place where people live should be marked as city: true
+- Geographic locations, villages, cities, states are NOT promotional content.
 Only flag as promoting if it advertises businesses, products, or services.
 Return only valid JSON, no markdown formatting."""
     
