@@ -120,38 +120,44 @@ def extract_disaster_info(text, submission):
     system_instruction = """You are a disaster intelligence analyst. Extract detailed information from disaster-related posts and return JSON with these fields:
 - place: The most specific location mentioned (format: 'City, Country' or 'Village, State, Country')
 - region: The continental region (asia, europe, north_america, south_america, africa, oceania, antarctica)
-- disaster_type: Type of disaster (earthquake, flood, fire, hurricane, tornado, landslide, tsunami, drought, cyclone, storm, etc.)
-- country: The country name if mentioned
-- state_province: The state or province if mentioned
-- city: The city or village name if mentioned
+- disaster_type: MUST be one of these exact options: earthquake, flood, fire, hurricane, tornado, landslide, tsunami, drought, cyclone, storm, volcanic_eruption, avalanche, heatwave, blizzard, wildfire, mudslide, sinkhole, other
 
 Examples:
-- 'Flood in Mumbai today' -> {"place": "Mumbai, India", "region": "asia", "disaster_type": "flood", "country": "India", "state_province": "Maharashtra", "city": "Mumbai"}
-- 'Earthquake hit Tokyo yesterday' -> {"place": "Tokyo, Japan", "region": "asia", "disaster_type": "earthquake", "country": "Japan", "state_province": "Tokyo", "city": "Tokyo"}
-- 'Forest fire spreading in California right now' -> {"place": "California, USA", "region": "north_america", "disaster_type": "fire", "country": "USA", "state_province": "California", "city": ""}
+- 'Flood in Mumbai today' -> {"place": "Mumbai, India", "region": "asia", "disaster_type": "flood"}
+- 'Earthquake hit Tokyo yesterday' -> {"place": "Tokyo, Japan", "region": "asia", "disaster_type": "earthquake"}
+- 'Forest fire spreading in California right now' -> {"place": "California, USA", "region": "north_america", "disaster_type": "wildfire"}
+- 'Volcano erupting in Italy' -> {"place": "Italy", "region": "europe", "disaster_type": "volcanic_eruption"}
 
+IMPORTANT: disaster_type must be exactly one of the predefined options. If unclear, use 'other'.
 Return only valid JSON, no markdown formatting."""
     
     result = call_gemini_api(f"Disaster text to analyze: {text}", system_instruction)
     timestamp_info = get_indian_timestamp(submission)
     
+    # Fixed disaster type options
+    valid_disaster_types = [
+        'earthquake', 'flood', 'fire', 'hurricane', 'tornado', 'landslide', 
+        'tsunami', 'drought', 'cyclone', 'storm', 'volcanic_eruption', 
+        'avalanche', 'heatwave', 'blizzard', 'wildfire', 'mudslide', 
+        'sinkhole', 'other'
+    ]
+    
     if result:
+        disaster_type = result.get('disaster_type', 'other')
+        # Validate disaster type is in our fixed list
+        if disaster_type not in valid_disaster_types:
+            disaster_type = 'other'
+            
         return {
             'place': result.get('place', 'Unknown'),
             'region': result.get('region', 'unknown'),
-            'disaster_type': result.get('disaster_type', 'unknown'),
-            'country': result.get('country', 'Unknown'),
-            'state_province': result.get('state_province', 'Unknown'),
-            'city': result.get('city', 'Unknown'),
+            'disaster_type': disaster_type,
             'timestamp_info': timestamp_info
         }
     return {
         'place': 'Unknown',
         'region': 'unknown', 
-        'disaster_type': 'unknown',
-        'country': 'Unknown',
-        'state_province': 'Unknown',
-        'city': 'Unknown',
+        'disaster_type': 'other',
         'timestamp_info': timestamp_info
     }
 
@@ -173,8 +179,6 @@ try:
         
         timestamp_info = get_indian_timestamp(submission)
         print(f"Posted: {timestamp_info['formatted_ist']}")
-        print(f"Date: {timestamp_info['ist_date']} ({timestamp_info['day_of_week']})")
-        print(f"Time: {timestamp_info['ist_time']} IST")
         
         content = submission.title + " " + (submission.selftext or "")
         has_city, has_location, is_promo = check_post_moderation(content)
@@ -208,12 +212,8 @@ try:
             
             disaster_info = extract_disaster_info(content, submission)
             print(f"Place: {disaster_info['place']}")
-            print(f"Country: {disaster_info['country']}")
-            print(f"State/Province: {disaster_info['state_province']}")
-            print(f"City: {disaster_info['city']}")
             print(f"Region: {disaster_info['region']}")
             print(f"Disaster Type: {disaster_info['disaster_type']}")
-            print(f"Post Timestamp: {disaster_info['timestamp_info']['formatted_ist']}")
             
             submission.mod.approve()
             
@@ -232,8 +232,6 @@ for submission in reddit.subreddit(subreddit_name).stream.submissions(skip_exist
     
     timestamp_info = get_indian_timestamp(submission)
     print(f"Posted: {timestamp_info['formatted_ist']}")
-    print(f"Date: {timestamp_info['ist_date']} ({timestamp_info['day_of_week']})")
-    print(f"Time: {timestamp_info['ist_time']} IST")
     
     content = submission.title + " " + (submission.selftext or "")
     has_city, has_location, is_promo = check_post_moderation(content)
@@ -267,12 +265,8 @@ for submission in reddit.subreddit(subreddit_name).stream.submissions(skip_exist
         
         disaster_info = extract_disaster_info(content, submission)
         print(f"Place: {disaster_info['place']}")
-        print(f"Country: {disaster_info['country']}")
-        print(f"State/Province: {disaster_info['state_province']}")
-        print(f"City: {disaster_info['city']}")
         print(f"Region: {disaster_info['region']}")
         print(f"Disaster Type: {disaster_info['disaster_type']}")
-        print(f"Post Timestamp: {disaster_info['timestamp_info']['formatted_ist']}")
         
         submission.mod.approve()
         
