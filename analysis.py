@@ -77,20 +77,19 @@ def extract_disaster_info(text, submission):
 - disaster_type: MUST be one of these 5 exact options: earthquake, flood, fire, storm, other
 - urgency_level: Rate from 1-3 (1=low, 2=moderate, 3=high)
 - confidence_level: Rate from 1-10 based on how credible the post seems and if there are previous cases
-- sources: Array of VALID and ACCESSIBLE URLs/links to relevant news sources or information you found about this location/disaster
+- sources: Array of Google search queries that users can search to find relevant news articles about this disaster
 
 Use Google Search to find recent news about the mentioned location and disaster type to verify information and assess urgency.
 
 Examples:
-- 'Flood in Mumbai today' -> {"place": "Mumbai, India", "region": "asia", "disaster_type": "flood", "urgency_level": 3, "confidence_level": 8, "sources": ["https://timesofindia.com/mumbai-flood-alert", "https://ndtv.com/mumbai-weather"]}
-- 'Earthquake hit Tokyo yesterday' -> {"place": "Tokyo, Japan", "region": "asia", "disaster_type": "earthquake", "urgency_level": 3, "confidence_level": 9, "sources": ["https://jma.go.jp/earthquake-report", "https://nhk.or.jp/earthquake-news"]}
+- 'Flood in Mumbai today' -> {"place": "Mumbai, India", "region": "asia", "disaster_type": "flood", "urgency_level": 3, "confidence_level": 8, "sources": ["Mumbai flood 2025 news", "Mumbai weather alert today", "Maharashtra flood update"]}
+- 'Earthquake hit Tokyo yesterday' -> {"place": "Tokyo, Japan", "region": "asia", "disaster_type": "earthquake", "urgency_level": 3, "confidence_level": 9, "sources": ["Tokyo earthquake today news", "Japan earthquake alert 2025", "Tokyo seismic activity report"]}
 
 IMPORTANT: 
 - Use search tools to verify if the disaster is real and recent
-- Provide ONLY valid, accessible, and working URLs/links in the sources array
-- Test that URLs are reachable and contain relevant disaster information
-- Do NOT include broken links, placeholder URLs, or inaccessible sources
-- Check for official sources, news reports, government alerts
+- Provide Google search query strings that will help users find relevant news articles
+- Include location name, disaster type, current year, and relevant keywords like "news", "alert", "update"
+- Create 2-3 specific search queries that target official sources, news reports, government alerts
 - Higher confidence for posts with corroborating evidence from multiple valid sources
 - Lower confidence (4 or below) for posts that cannot be verified with reliable sources
 - Higher urgency for ongoing/recent disasters affecting populated areas
