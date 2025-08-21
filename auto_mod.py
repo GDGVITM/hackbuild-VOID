@@ -120,27 +120,24 @@ def extract_disaster_info(text, submission):
     system_instruction = """You are a disaster intelligence analyst. Extract detailed information from disaster-related posts and return JSON with these fields:
 - place: The most specific location mentioned (format: 'City, Country' or 'Village, State, Country')
 - region: The continental region (asia, europe, north_america, south_america, africa, oceania, antarctica)
-- disaster_type: MUST be one of these exact options: earthquake, flood, fire, hurricane, tornado, landslide, tsunami, drought, cyclone, storm, volcanic_eruption, avalanche, heatwave, blizzard, wildfire, mudslide, sinkhole, other
+- disaster_type: MUST be one of these 5 exact options: earthquake, flood, fire, storm, other
 
 Examples:
 - 'Flood in Mumbai today' -> {"place": "Mumbai, India", "region": "asia", "disaster_type": "flood"}
 - 'Earthquake hit Tokyo yesterday' -> {"place": "Tokyo, Japan", "region": "asia", "disaster_type": "earthquake"}
-- 'Forest fire spreading in California right now' -> {"place": "California, USA", "region": "north_america", "disaster_type": "wildfire"}
-- 'Volcano erupting in Italy' -> {"place": "Italy", "region": "europe", "disaster_type": "volcanic_eruption"}
+- 'Forest fire spreading in California right now' -> {"place": "California, USA", "region": "north_america", "disaster_type": "fire"}
+- 'Hurricane approaching Florida' -> {"place": "Florida, USA", "region": "north_america", "disaster_type": "storm"}
+- 'Cyclone hitting coast' -> {"place": "Coast", "region": "unknown", "disaster_type": "storm"}
 
-IMPORTANT: disaster_type must be exactly one of the predefined options. If unclear, use 'other'.
+IMPORTANT: disaster_type must be exactly one of: earthquake, flood, fire, storm, other
+Map related disasters: hurricane/cyclone/tornado -> storm, wildfire/forest fire -> fire, landslide/tsunami/drought -> other
 Return only valid JSON, no markdown formatting."""
     
     result = call_gemini_api(f"Disaster text to analyze: {text}", system_instruction)
     timestamp_info = get_indian_timestamp(submission)
     
-    # Fixed disaster type options
-    valid_disaster_types = [
-        'earthquake', 'flood', 'fire', 'hurricane', 'tornado', 'landslide', 
-        'tsunami', 'drought', 'cyclone', 'storm', 'volcanic_eruption', 
-        'avalanche', 'heatwave', 'blizzard', 'wildfire', 'mudslide', 
-        'sinkhole', 'other'
-    ]
+    # Fixed disaster type options - only 5
+    valid_disaster_types = ['earthquake', 'flood', 'fire', 'storm', 'other']
     
     if result:
         disaster_type = result.get('disaster_type', 'other')
