@@ -144,7 +144,7 @@ def extract_disaster_info(text, submission):
 - disaster_type: MUST be one of these 5 exact options: earthquake, flood, fire, storm, other
 - urgency_level: Rate from 1-3 (1=low, 2=moderate, 3=high)
 - confidence_level: Rate from 1-10 based on how credible the post seems and if there are previous cases
-- sources: Array of actual URLs/links to relevant news sources or information you found about this location/disaster
+- sources: Array of VALID and ACCESSIBLE URLs/links to relevant news sources or information you found about this location/disaster
 
 Use Google Search to find recent news about the mentioned location and disaster type to verify information and assess urgency.
 
@@ -154,9 +154,12 @@ Examples:
 
 IMPORTANT: 
 - Use search tools to verify if the disaster is real and recent
-- Provide actual working URLs/links in the sources array, not just news source names
+- Provide ONLY valid, accessible, and working URLs/links in the sources array
+- Test that URLs are reachable and contain relevant disaster information
+- Do NOT include broken links, placeholder URLs, or inaccessible sources
 - Check for official sources, news reports, government alerts
-- Higher confidence for posts with corroborating evidence
+- Higher confidence for posts with corroborating evidence from multiple valid sources
+- Lower confidence (4 or below) for posts that cannot be verified with reliable sources
 - Higher urgency for ongoing/recent disasters affecting populated areas
 - disaster_type must be exactly one of: earthquake, flood, fire, storm, other
 Return only valid JSON, no markdown formatting."""
@@ -252,7 +255,17 @@ try:
             else:
                 print("Sources: No additional sources found")
             
-            submission.mod.approve()
+            # Check confidence level - remove if 4 or below
+            if disaster_info['confidence_level'] <= 4:
+                print(f"REJECTED: Low confidence level ({disaster_info['confidence_level']}/10)")
+                removal_message = f"Your post was removed due to low credibility score ({disaster_info['confidence_level']}/10). Unable to verify the disaster information from reliable sources."
+                submission.mod.remove()
+                submission.mod.send_removal_message(
+                    message=removal_message,
+                    type="public"
+                )
+            else:
+                submission.mod.approve()
             
         time.sleep(2)
         
@@ -311,6 +324,16 @@ for submission in reddit.subreddit(subreddit_name).stream.submissions(skip_exist
         else:
             print("Sources: No additional sources found")
         
-        submission.mod.approve()
+        # Check confidence level - remove if 4 or below
+        if disaster_info['confidence_level'] <= 4:
+            print(f"REJECTED: Low confidence level ({disaster_info['confidence_level']}/10)")
+            removal_message = f"Your post was removed due to low credibility score ({disaster_info['confidence_level']}/10). Unable to verify the disaster information from reliable sources."
+            submission.mod.remove()
+            submission.mod.send_removal_message(
+                message=removal_message,
+                type="public"
+            )
+        else:
+            submission.mod.approve()
         
     time.sleep(1)
