@@ -3,11 +3,17 @@ import json
 from datetime import datetime
 
 def create_database():
+<<<<<<< HEAD
     """Create enhanced disaster_analysis.db with extended schema"""
     conn = sqlite3.connect('disaster_analysis.db')
     cursor = conn.cursor()
     
     # Enhanced disaster_posts table with additional fields for visualization
+=======
+    conn = sqlite3.connect('disaster_analysis.db')
+    cursor = conn.cursor()
+    
+>>>>>>> ba86c2739d39391d945dadb34ae3e7e5b43fd744
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS disaster_posts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,6 +28,7 @@ def create_database():
             urgency_level INTEGER,
             confidence_level INTEGER,
             sources TEXT,
+<<<<<<< HEAD
             approved BOOLEAN,
             latitude REAL,
             longitude REAL,
@@ -30,6 +37,9 @@ def create_database():
             source_platform TEXT,
             hashtags TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+=======
+            approved BOOLEAN
+>>>>>>> ba86c2739d39391d945dadb34ae3e7e5b43fd744
         )
     ''')
     
@@ -37,7 +47,10 @@ def create_database():
     conn.close()
 
 def store_analysis(submission, disaster_info, approved):
+<<<<<<< HEAD
     """Store disaster analysis with enhanced format and proper default handling"""
+=======
+>>>>>>> ba86c2739d39391d945dadb34ae3e7e5b43fd744
     if not approved:
         print(f"Skipping database storage for rejected post {submission.id}")
         return
@@ -46,6 +59,7 @@ def store_analysis(submission, disaster_info, approved):
     cursor = conn.cursor()
     
     try:
+<<<<<<< HEAD
         # Extract coordinates if available, with proper defaults
         latitude = disaster_info.get('latitude') if disaster_info.get('latitude') is not None else 0.0
         longitude = disaster_info.get('longitude') if disaster_info.get('longitude') is not None else 0.0
@@ -122,11 +136,41 @@ def store_analysis(submission, disaster_info, approved):
         print(f"Unexpected error in store_analysis: {e}")
         import traceback
         traceback.print_exc()
+=======
+        cursor.execute('''
+            INSERT OR REPLACE INTO disaster_posts 
+            (post_id, title, content, author, post_time, place, region, 
+             disaster_type, urgency_level, confidence_level, sources, approved)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            submission.id,
+            submission.title,
+            submission.selftext,
+            str(submission.author),
+            datetime.fromtimestamp(submission.created_utc).isoformat(),
+            disaster_info.get('place', ''),
+            disaster_info.get('region', ''),
+            disaster_info.get('disaster_type', ''),
+            disaster_info.get('urgency_level', 0),
+            disaster_info.get('confidence_level', 0),
+            json.dumps(disaster_info.get('sources', [])),
+            approved
+        ))
+        
+        conn.commit()
+        print(f"Stored analysis for approved post {submission.id} in database")
+        
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+>>>>>>> ba86c2739d39391d945dadb34ae3e7e5b43fd744
     finally:
         conn.close()
 
 def get_all_analyses():
+<<<<<<< HEAD
     """Get all disaster analyses"""
+=======
+>>>>>>> ba86c2739d39391d945dadb34ae3e7e5b43fd744
     conn = sqlite3.connect('disaster_analysis.db')
     cursor = conn.cursor()
     
@@ -137,7 +181,10 @@ def get_all_analyses():
     return results
 
 def get_analyses_by_disaster_type(disaster_type):
+<<<<<<< HEAD
     """Get analyses filtered by disaster type"""
+=======
+>>>>>>> ba86c2739d39391d945dadb34ae3e7e5b43fd744
     conn = sqlite3.connect('disaster_analysis.db')
     cursor = conn.cursor()
     
@@ -148,15 +195,23 @@ def get_analyses_by_disaster_type(disaster_type):
     return results
 
 def get_high_urgency_posts():
+<<<<<<< HEAD
     """Get high urgency disaster posts"""
     conn = sqlite3.connect('disaster_analysis.db')
     cursor = conn.cursor()
     
     cursor.execute('SELECT * FROM disaster_posts WHERE urgency_level >= 3 ORDER BY post_time DESC')
+=======
+    conn = sqlite3.connect('disaster_analysis.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT * FROM disaster_posts WHERE urgency_level = 3 ORDER BY post_time DESC')
+>>>>>>> ba86c2739d39391d945dadb34ae3e7e5b43fd744
     results = cursor.fetchall()
     
     conn.close()
     return results
+<<<<<<< HEAD
 
 def get_disaster_statistics():
     """Get comprehensive disaster statistics from database"""
@@ -230,3 +285,5 @@ if __name__ == "__main__":
     print(f"By region: {stats['by_region']}")
     print(f"By urgency: {stats['by_urgency']}")
     print(f"Average confidence: {stats['avg_confidence']:.1f}%")
+=======
+>>>>>>> ba86c2739d39391d945dadb34ae3e7e5b43fd744

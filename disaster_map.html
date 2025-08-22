@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_15bb539ce4beac1f4597e8a932147f6d {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+    <div style="position: fixed; 
+                bottom: 30px; left: 30px; width: 200px; 
+                background-color: white; border: 3px solid #2E86AB; z-index: 9999; 
+                font-size: 14px; padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+    <h4 style="margin-top: 0; color: #2E86AB; text-align: center;">Disaster Types</h4>
+    
+        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <div style="width: 18px; height: 18px; background-color: #FF6B35; border: 1px solid black; margin-right: 8px; border-radius: 50%;"></div>
+            <span style="font-size: 12px; font-weight: bold;">Earthquake</span>
+        </div>
+        
+        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <div style="width: 18px; height: 18px; background-color: #1E88E5; border: 1px solid black; margin-right: 8px; border-radius: 50%;"></div>
+            <span style="font-size: 12px; font-weight: bold;">Flood</span>
+        </div>
+        
+        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <div style="width: 18px; height: 18px; background-color: #E53935; border: 1px solid black; margin-right: 8px; border-radius: 50%;"></div>
+            <span style="font-size: 12px; font-weight: bold;">Fire</span>
+        </div>
+        
+        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <div style="width: 18px; height: 18px; background-color: #8E24AA; border: 1px solid black; margin-right: 8px; border-radius: 50%;"></div>
+            <span style="font-size: 12px; font-weight: bold;">Storm</span>
+        </div>
+        
+        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <div style="width: 18px; height: 18px; background-color: #43A047; border: 1px solid black; margin-right: 8px; border-radius: 50%;"></div>
+            <span style="font-size: 12px; font-weight: bold;">Other</span>
+        </div>
+        
+    <hr style="margin: 10px 0; border: 1px solid #2E86AB;">
+    <div style="text-align: center; font-size: 11px; color: #666;">
+        <p style="margin: 2px 0;"><strong>Urgency Levels:</strong></p>
+        <p style="margin: 2px 0;">● Low | ●● Moderate | ●●● High</p>
+        <p style="margin: 2px 0;">Size = Urgency + Confidence</p>
+    </div>
+    </div>
+    
+    
+            <div class="folium-map" id="map_15bb539ce4beac1f4597e8a932147f6d" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_15bb539ce4beac1f4597e8a932147f6d = L.map(
+                "map_15bb539ce4beac1f4597e8a932147f6d",
+                {
+                    center: [20.0, 0.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 2,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_2ac08812d1d404623942471346e276a3 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_2ac08812d1d404623942471346e276a3.addTo(map_15bb539ce4beac1f4597e8a932147f6d);
+        
+    
+            var marker_755acfb82cca910006c43f48b6a0031d = L.marker(
+                [-58.555462, -62.4830802],
+                {
+}
+            ).addTo(map_15bb539ce4beac1f4597e8a932147f6d);
+        
+    
+            var div_icon_68863395b10e36128b328fdd1614f402 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"position: relative; width: 30px; height: 40px;\"\u003e\n                \u003c!-- Pin body --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    width: 30px;\n                    height: 30px;\n                    background: #FF6B35;\n                    border: 3px solid #ffffff;\n                    border-radius: 50% 50% 50% 0;\n                    transform: rotate(-45deg);\n                    box-shadow: 0 4px 8px rgba(0,0,0,0.3);\n                    top: 0;\n                    left: 0;\n                \"\u003e\u003c/div\u003e\n                \u003c!-- Inner icon --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    top: 6px;\n                    left: 6px;\n                    width: 18px;\n                    height: 18px;\n                    background: white;\n                    border-radius: 50%;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    font-size: 10px;\n                    z-index: 10;\n                    transform: rotate(45deg);\n                \"\u003e\ud83d\udd25\u003c/div\u003e\n                \u003c!-- Pin tip shadow --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    bottom: -2px;\n                    left: 13px;\n                    width: 4px;\n                    height: 4px;\n                    background: rgba(0,0,0,0.2);\n                    border-radius: 50%;\n                    transform: scale(1, 0.5);\n                \"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n            ",
+  "iconSize": [30, 40],
+  "iconAnchor": [15, 40],
+  "className": "empty",
+});
+            marker_755acfb82cca910006c43f48b6a0031d.setIcon(div_icon_68863395b10e36128b328fdd1614f402);
+        
+    
+        var popup_949c677480a1e2d011adf062488a2ec9 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_fdfec4cfd54ddbf2a097f8f194c2269a = $(`<div id="html_fdfec4cfd54ddbf2a097f8f194c2269a" style="width: 100.0%; height: 100.0%;">             <div style="width: 350px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h2 style="margin: 0 0 15px 0; color: #fff; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">                     🌍 Drake Passage                 </h2>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #FF6B35; color: white; padding: 8px; border-radius: 5px;">                             <strong>Earthquake</strong>                         </div>                         <div style="text-align: center; background: #f39c12; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 2/3                         </div>                     </div>                                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">                         <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px;">                             Confidence: 8/10                         </div>                         <div style="text-align: center; background: #9b59b6; color: white; padding: 8px; border-radius: 5px;">                             South America                         </div>                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>📰 Title:</strong> Powerful 7.5-Magnitude Earthquake Shakes Drake Passage, No Tsunami Threat</p>                     <p style="margin: 5px 0;"><strong>👤 Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>📅 Time:</strong> 2025-08-22 20:51:36</p>                     <p style="margin: 5px 0;"><strong>🌍 Location:</strong> Drake Passage</p>                 </div>             </div>             </div>`)[0];
+                popup_949c677480a1e2d011adf062488a2ec9.setContent(html_fdfec4cfd54ddbf2a097f8f194c2269a);
+            
+        
+
+        marker_755acfb82cca910006c43f48b6a0031d.bindPopup(popup_949c677480a1e2d011adf062488a2ec9)
+        ;
+
+        
+    
+    
+            marker_755acfb82cca910006c43f48b6a0031d.bindTooltip(
+                `<div style="background-color: rgba(0,0,0,0.8); color: white; font-family: Arial; padding: 10px; border-radius: 8px; font-size: 12px; white-space: pre-line;">
+                     
+            🔥 EARTHQUAKE in Drake Passage
+            📍 Drake Passage
+            ⚠️ Urgency: 2/3
+            🎯 Confidence: 8/10
+            📅 2025-08-22 20:51:36
+            👤 by Few-Penalty-2711
+            
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_755acfb82cca910006c43f48b6a0031d.setIcon(div_icon_68863395b10e36128b328fdd1614f402);
+            
+    
+            var marker_33e61efa4852ed5f05993a7dfb4530a9 = L.marker(
+                [38.5787966, -122.579705],
+                {
+}
+            ).addTo(map_15bb539ce4beac1f4597e8a932147f6d);
+        
+    
+            var div_icon_ed02fa340486296693d059166e8b3ed5 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"position: relative; width: 30px; height: 40px;\"\u003e\n                \u003c!-- Pin body --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    width: 30px;\n                    height: 30px;\n                    background: #E53935;\n                    border: 3px solid #ffffff;\n                    border-radius: 50% 50% 50% 0;\n                    transform: rotate(-45deg);\n                    box-shadow: 0 4px 8px rgba(0,0,0,0.3);\n                    top: 0;\n                    left: 0;\n                \"\u003e\u003c/div\u003e\n                \u003c!-- Inner icon --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    top: 6px;\n                    left: 6px;\n                    width: 18px;\n                    height: 18px;\n                    background: white;\n                    border-radius: 50%;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    font-size: 10px;\n                    z-index: 10;\n                    transform: rotate(45deg);\n                \"\u003e\ud83d\udea8\u003c/div\u003e\n                \u003c!-- Pin tip shadow --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    bottom: -2px;\n                    left: 13px;\n                    width: 4px;\n                    height: 4px;\n                    background: rgba(0,0,0,0.2);\n                    border-radius: 50%;\n                    transform: scale(1, 0.5);\n                \"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n            ",
+  "iconSize": [30, 40],
+  "iconAnchor": [15, 40],
+  "className": "empty",
+});
+            marker_33e61efa4852ed5f05993a7dfb4530a9.setIcon(div_icon_ed02fa340486296693d059166e8b3ed5);
+        
+    
+        var popup_b823769584a3b8aff270a8d4d25e0db4 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_89eb8a36c3d4dbe6cc2d96efc3898597 = $(`<div id="html_89eb8a36c3d4dbe6cc2d96efc3898597" style="width: 100.0%; height: 100.0%;">             <div style="width: 350px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h2 style="margin: 0 0 15px 0; color: #fff; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">                     🌍 Calistoga, Napa County, USA                 </h2>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #E53935; color: white; padding: 8px; border-radius: 5px;">                             <strong>Fire</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">                         <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px;">                             Confidence: 9/10                         </div>                         <div style="text-align: center; background: #9b59b6; color: white; padding: 8px; border-radius: 5px;">                             North America                         </div>                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>📰 Title:</strong> Rapidly Spreading Pickett Fire Sparks Evacuations in Napa Valley</p>                     <p style="margin: 5px 0;"><strong>👤 Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>📅 Time:</strong> 2025-08-22 19:55:43</p>                     <p style="margin: 5px 0;"><strong>🌍 Location:</strong> United States</p>                 </div>             </div>             </div>`)[0];
+                popup_b823769584a3b8aff270a8d4d25e0db4.setContent(html_89eb8a36c3d4dbe6cc2d96efc3898597);
+            
+        
+
+        marker_33e61efa4852ed5f05993a7dfb4530a9.bindPopup(popup_b823769584a3b8aff270a8d4d25e0db4)
+        ;
+
+        
+    
+    
+            marker_33e61efa4852ed5f05993a7dfb4530a9.bindTooltip(
+                `<div style="background-color: rgba(0,0,0,0.8); color: white; font-family: Arial; padding: 10px; border-radius: 8px; font-size: 12px; white-space: pre-line;">
+                     
+            🔥 FIRE in Calistoga, Napa County, USA
+            📍 United States
+            ⚠️ Urgency: 3/3
+            🎯 Confidence: 9/10
+            📅 2025-08-22 19:55:43
+            👤 by Few-Penalty-2711
+            
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_33e61efa4852ed5f05993a7dfb4530a9.setIcon(div_icon_ed02fa340486296693d059166e8b3ed5);
+            
+    
+            var marker_a754d99f115a845bec726f0864360c99 = L.marker(
+                [31.0408468, 78.7815312],
+                {
+}
+            ).addTo(map_15bb539ce4beac1f4597e8a932147f6d);
+        
+    
+            var div_icon_eb9501068906e50f26d4500d54248014 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"position: relative; width: 30px; height: 40px;\"\u003e\n                \u003c!-- Pin body --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    width: 30px;\n                    height: 30px;\n                    background: #1E88E5;\n                    border: 3px solid #ffffff;\n                    border-radius: 50% 50% 50% 0;\n                    transform: rotate(-45deg);\n                    box-shadow: 0 4px 8px rgba(0,0,0,0.3);\n                    top: 0;\n                    left: 0;\n                \"\u003e\u003c/div\u003e\n                \u003c!-- Inner icon --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    top: 6px;\n                    left: 6px;\n                    width: 18px;\n                    height: 18px;\n                    background: white;\n                    border-radius: 50%;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    font-size: 10px;\n                    z-index: 10;\n                    transform: rotate(45deg);\n                \"\u003e\ud83d\udea8\u003c/div\u003e\n                \u003c!-- Pin tip shadow --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    bottom: -2px;\n                    left: 13px;\n                    width: 4px;\n                    height: 4px;\n                    background: rgba(0,0,0,0.2);\n                    border-radius: 50%;\n                    transform: scale(1, 0.5);\n                \"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n            ",
+  "iconSize": [30, 40],
+  "iconAnchor": [15, 40],
+  "className": "empty",
+});
+            marker_a754d99f115a845bec726f0864360c99.setIcon(div_icon_eb9501068906e50f26d4500d54248014);
+        
+    
+        var popup_9b92ade9799161e8b5862bf95a7b267d = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_46f90905cd117aec1d0ea7cbb024d192 = $(`<div id="html_46f90905cd117aec1d0ea7cbb024d192" style="width: 100.0%; height: 100.0%;">             <div style="width: 350px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h2 style="margin: 0 0 15px 0; color: #fff; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">                     🌍 Dharali, Uttarkashi, India                 </h2>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #1E88E5; color: white; padding: 8px; border-radius: 5px;">                             <strong>Flood</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">                         <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px;">                             Confidence: 9/10                         </div>                         <div style="text-align: center; background: #9b59b6; color: white; padding: 8px; border-radius: 5px;">                             Asia                         </div>                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>📰 Title:</strong> Himalayan Hamlet Engulfed: Hundreds Missing After Flash Flood</p>                     <p style="margin: 5px 0;"><strong>👤 Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>📅 Time:</strong> 2025-08-22 19:54:44</p>                     <p style="margin: 5px 0;"><strong>🌍 Location:</strong> India</p>                 </div>             </div>             </div>`)[0];
+                popup_9b92ade9799161e8b5862bf95a7b267d.setContent(html_46f90905cd117aec1d0ea7cbb024d192);
+            
+        
+
+        marker_a754d99f115a845bec726f0864360c99.bindPopup(popup_9b92ade9799161e8b5862bf95a7b267d)
+        ;
+
+        
+    
+    
+            marker_a754d99f115a845bec726f0864360c99.bindTooltip(
+                `<div style="background-color: rgba(0,0,0,0.8); color: white; font-family: Arial; padding: 10px; border-radius: 8px; font-size: 12px; white-space: pre-line;">
+                     
+            🔥 FLOOD in Dharali, Uttarkashi, India
+            📍 India
+            ⚠️ Urgency: 3/3
+            🎯 Confidence: 9/10
+            📅 2025-08-22 19:54:44
+            👤 by Few-Penalty-2711
+            
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a754d99f115a845bec726f0864360c99.setIcon(div_icon_eb9501068906e50f26d4500d54248014);
+            
+    
+            var marker_eb9fb8fee38d66a42b66faddbe12c3d7 = L.marker(
+                [40.190632, 116.412144],
+                {
+}
+            ).addTo(map_15bb539ce4beac1f4597e8a932147f6d);
+        
+    
+            var div_icon_9362e9fc051efa125994b002583e35a8 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"position: relative; width: 30px; height: 40px;\"\u003e\n                \u003c!-- Pin body --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    width: 30px;\n                    height: 30px;\n                    background: #1E88E5;\n                    border: 3px solid #ffffff;\n                    border-radius: 50% 50% 50% 0;\n                    transform: rotate(-45deg);\n                    box-shadow: 0 4px 8px rgba(0,0,0,0.3);\n                    top: 0;\n                    left: 0;\n                \"\u003e\u003c/div\u003e\n                \u003c!-- Inner icon --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    top: 6px;\n                    left: 6px;\n                    width: 18px;\n                    height: 18px;\n                    background: white;\n                    border-radius: 50%;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    font-size: 10px;\n                    z-index: 10;\n                    transform: rotate(45deg);\n                \"\u003e\ud83d\udea8\u003c/div\u003e\n                \u003c!-- Pin tip shadow --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    bottom: -2px;\n                    left: 13px;\n                    width: 4px;\n                    height: 4px;\n                    background: rgba(0,0,0,0.2);\n                    border-radius: 50%;\n                    transform: scale(1, 0.5);\n                \"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n            ",
+  "iconSize": [30, 40],
+  "iconAnchor": [15, 40],
+  "className": "empty",
+});
+            marker_eb9fb8fee38d66a42b66faddbe12c3d7.setIcon(div_icon_9362e9fc051efa125994b002583e35a8);
+        
+    
+        var popup_29f430941d1784653a4d14788eaa062e = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_d138f0eca887532bda98cc7db8b0217c = $(`<div id="html_d138f0eca887532bda98cc7db8b0217c" style="width: 100.0%; height: 100.0%;">             <div style="width: 350px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h2 style="margin: 0 0 15px 0; color: #fff; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">                     🌍 Beijing, China                 </h2>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #1E88E5; color: white; padding: 8px; border-radius: 5px;">                             <strong>Flood</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">                         <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px;">                             Confidence: 9/10                         </div>                         <div style="text-align: center; background: #9b59b6; color: white; padding: 8px; border-radius: 5px;">                             Asia                         </div>                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>📰 Title:</strong> Beijing Mourns 44 Dead After Unprecedented Flash Floods</p>                     <p style="margin: 5px 0;"><strong>👤 Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>📅 Time:</strong> 2025-08-22 19:52:46</p>                     <p style="margin: 5px 0;"><strong>🌍 Location:</strong> 中国</p>                 </div>             </div>             </div>`)[0];
+                popup_29f430941d1784653a4d14788eaa062e.setContent(html_d138f0eca887532bda98cc7db8b0217c);
+            
+        
+
+        marker_eb9fb8fee38d66a42b66faddbe12c3d7.bindPopup(popup_29f430941d1784653a4d14788eaa062e)
+        ;
+
+        
+    
+    
+            marker_eb9fb8fee38d66a42b66faddbe12c3d7.bindTooltip(
+                `<div style="background-color: rgba(0,0,0,0.8); color: white; font-family: Arial; padding: 10px; border-radius: 8px; font-size: 12px; white-space: pre-line;">
+                     
+            🔥 FLOOD in Beijing, China
+            📍 中国
+            ⚠️ Urgency: 3/3
+            🎯 Confidence: 9/10
+            📅 2025-08-22 19:52:46
+            👤 by Few-Penalty-2711
+            
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_eb9fb8fee38d66a42b66faddbe12c3d7.setIcon(div_icon_9362e9fc051efa125994b002583e35a8);
+            
+    
+            var marker_6758acd002703bcc3022121e5866ae3f = L.marker(
+                [19.1114795, 72.928021],
+                {
+}
+            ).addTo(map_15bb539ce4beac1f4597e8a932147f6d);
+        
+    
+            var div_icon_1f708ab4b4b99a81d35562d1b12cf232 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"position: relative; width: 30px; height: 40px;\"\u003e\n                \u003c!-- Pin body --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    width: 30px;\n                    height: 30px;\n                    background: #43A047;\n                    border: 3px solid #ffffff;\n                    border-radius: 50% 50% 50% 0;\n                    transform: rotate(-45deg);\n                    box-shadow: 0 4px 8px rgba(0,0,0,0.3);\n                    top: 0;\n                    left: 0;\n                \"\u003e\u003c/div\u003e\n                \u003c!-- Inner icon --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    top: 6px;\n                    left: 6px;\n                    width: 18px;\n                    height: 18px;\n                    background: white;\n                    border-radius: 50%;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    font-size: 10px;\n                    z-index: 10;\n                    transform: rotate(45deg);\n                \"\u003e\ud83d\udea8\u003c/div\u003e\n                \u003c!-- Pin tip shadow --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    bottom: -2px;\n                    left: 13px;\n                    width: 4px;\n                    height: 4px;\n                    background: rgba(0,0,0,0.2);\n                    border-radius: 50%;\n                    transform: scale(1, 0.5);\n                \"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n            ",
+  "iconSize": [30, 40],
+  "iconAnchor": [15, 40],
+  "className": "empty",
+});
+            marker_6758acd002703bcc3022121e5866ae3f.setIcon(div_icon_1f708ab4b4b99a81d35562d1b12cf232);
+        
+    
+        var popup_ade371f99ad6031fa34c45c8588ee297 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_d0b021fbde1bfe9cc4e35f7df71026d9 = $(`<div id="html_d0b021fbde1bfe9cc4e35f7df71026d9" style="width: 100.0%; height: 100.0%;">             <div style="width: 350px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h2 style="margin: 0 0 15px 0; color: #fff; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">                     🌍 Vikhroli, Mumbai, India                 </h2>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #43A047; color: white; padding: 8px; border-radius: 5px;">                             <strong>Other</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">                         <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px;">                             Confidence: 9/10                         </div>                         <div style="text-align: center; background: #9b59b6; color: white; padding: 8px; border-radius: 5px;">                             Asia                         </div>                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>📰 Title:</strong> Landslide Tragedy Claims Father and Daughter in Mumbai</p>                     <p style="margin: 5px 0;"><strong>👤 Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>📅 Time:</strong> 2025-08-22 19:35:35</p>                     <p style="margin: 5px 0;"><strong>🌍 Location:</strong> India</p>                 </div>             </div>             </div>`)[0];
+                popup_ade371f99ad6031fa34c45c8588ee297.setContent(html_d0b021fbde1bfe9cc4e35f7df71026d9);
+            
+        
+
+        marker_6758acd002703bcc3022121e5866ae3f.bindPopup(popup_ade371f99ad6031fa34c45c8588ee297)
+        ;
+
+        
+    
+    
+            marker_6758acd002703bcc3022121e5866ae3f.bindTooltip(
+                `<div style="background-color: rgba(0,0,0,0.8); color: white; font-family: Arial; padding: 10px; border-radius: 8px; font-size: 12px; white-space: pre-line;">
+                     
+            🔥 OTHER in Vikhroli, Mumbai, India
+            📍 India
+            ⚠️ Urgency: 3/3
+            🎯 Confidence: 9/10
+            📅 2025-08-22 19:35:35
+            👤 by Few-Penalty-2711
+            
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6758acd002703bcc3022121e5866ae3f.setIcon(div_icon_1f708ab4b4b99a81d35562d1b12cf232);
+            
+    
+            var marker_c4f8e4f1e11723d3d9b07a6ccd01c210 = L.marker(
+                [40.190632, 116.412144],
+                {
+}
+            ).addTo(map_15bb539ce4beac1f4597e8a932147f6d);
+        
+    
+            var div_icon_3afaf72cbc6777e9d16e157eab709af1 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"position: relative; width: 30px; height: 40px;\"\u003e\n                \u003c!-- Pin body --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    width: 30px;\n                    height: 30px;\n                    background: #1E88E5;\n                    border: 3px solid #ffffff;\n                    border-radius: 50% 50% 50% 0;\n                    transform: rotate(-45deg);\n                    box-shadow: 0 4px 8px rgba(0,0,0,0.3);\n                    top: 0;\n                    left: 0;\n                \"\u003e\u003c/div\u003e\n                \u003c!-- Inner icon --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    top: 6px;\n                    left: 6px;\n                    width: 18px;\n                    height: 18px;\n                    background: white;\n                    border-radius: 50%;\n                    display: flex;\n                    align-items: center;\n                    justify-content: center;\n                    font-size: 10px;\n                    z-index: 10;\n                    transform: rotate(45deg);\n                \"\u003e\ud83d\udea8\u003c/div\u003e\n                \u003c!-- Pin tip shadow --\u003e\n                \u003cdiv style=\"\n                    position: absolute;\n                    bottom: -2px;\n                    left: 13px;\n                    width: 4px;\n                    height: 4px;\n                    background: rgba(0,0,0,0.2);\n                    border-radius: 50%;\n                    transform: scale(1, 0.5);\n                \"\u003e\u003c/div\u003e\n            \u003c/div\u003e\n            ",
+  "iconSize": [30, 40],
+  "iconAnchor": [15, 40],
+  "className": "empty",
+});
+            marker_c4f8e4f1e11723d3d9b07a6ccd01c210.setIcon(div_icon_3afaf72cbc6777e9d16e157eab709af1);
+        
+    
+        var popup_a42409ec9e66e34ac27f9956a4562a15 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_3b298128b41947d81ec669f78a4bc12b = $(`<div id="html_3b298128b41947d81ec669f78a4bc12b" style="width: 100.0%; height: 100.0%;">             <div style="width: 350px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h2 style="margin: 0 0 15px 0; color: #fff; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">                     🌍 Beijing, China                 </h2>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #1E88E5; color: white; padding: 8px; border-radius: 5px;">                             <strong>Flood</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">                         <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px;">                             Confidence: 9/10                         </div>                         <div style="text-align: center; background: #9b59b6; color: white; padding: 8px; border-radius: 5px;">                             Asia                         </div>                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>📰 Title:</strong> Beijing Mourns 44 Dead After Unprecedented Flash Floods</p>                     <p style="margin: 5px 0;"><strong>👤 Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>📅 Time:</strong> 2025-08-22 19:00:07</p>                     <p style="margin: 5px 0;"><strong>🌍 Location:</strong> 中国</p>                 </div>             </div>             </div>`)[0];
+                popup_a42409ec9e66e34ac27f9956a4562a15.setContent(html_3b298128b41947d81ec669f78a4bc12b);
+            
+        
+
+        marker_c4f8e4f1e11723d3d9b07a6ccd01c210.bindPopup(popup_a42409ec9e66e34ac27f9956a4562a15)
+        ;
+
+        
+    
+    
+            marker_c4f8e4f1e11723d3d9b07a6ccd01c210.bindTooltip(
+                `<div style="background-color: rgba(0,0,0,0.8); color: white; font-family: Arial; padding: 10px; border-radius: 8px; font-size: 12px; white-space: pre-line;">
+                     
+            🔥 FLOOD in Beijing, China
+            📍 中国
+            ⚠️ Urgency: 3/3
+            🎯 Confidence: 9/10
+            📅 2025-08-22 19:00:07
+            👤 by Few-Penalty-2711
+            
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c4f8e4f1e11723d3d9b07a6ccd01c210.setIcon(div_icon_3afaf72cbc6777e9d16e157eab709af1);
+            
+</script>
+</html>
