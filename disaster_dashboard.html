@@ -1,0 +1,313 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Disaster Analysis Dashboard</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    margin: 0;
+                    padding: 20px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    min-height: 100vh;
+                }
+                .container {
+                    max-width: 1400px;
+                    margin: 0 auto;
+                    background: white;
+                    border-radius: 15px;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                    overflow: hidden;
+                }
+                .header {
+                    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+                    color: white;
+                    padding: 30px;
+                    text-align: center;
+                }
+                .header h1 {
+                    margin: 0;
+                    font-size: 2.5em;
+                    font-weight: 300;
+                }
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 20px;
+                    padding: 30px;
+                    background: #f8f9fa;
+                }
+                .stat-card {
+                    background: white;
+                    padding: 25px;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                    text-align: center;
+                    transition: transform 0.3s ease;
+                }
+                .stat-card:hover {
+                    transform: translateY(-5px);
+                }
+                .stat-number {
+                    font-size: 2.5em;
+                    font-weight: bold;
+                    color: #ff6b6b;
+                    margin-bottom: 10px;
+                }
+                .stat-label {
+                    color: #666;
+                    font-size: 0.9em;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+                .charts-container {
+                    padding: 30px;
+                }
+                .chart-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                    gap: 30px;
+                    margin-bottom: 30px;
+                }
+                .chart-card {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                }
+                .chart-title {
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    margin-bottom: 20px;
+                    color: #333;
+                }
+                .data-table {
+                    width: 100%;
+                    background: white;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                    margin-top: 30px;
+                }
+                .data-table table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .data-table th {
+                    background: #ff6b6b;
+                    color: white;
+                    padding: 15px;
+                    text-align: left;
+                    font-weight: 600;
+                }
+                .data-table td {
+                    padding: 12px 15px;
+                    border-bottom: 1px solid #eee;
+                }
+                .data-table tr:hover {
+                    background: #f8f9fa;
+                }
+                .disaster-type {
+                    padding: 5px 10px;
+                    border-radius: 15px;
+                    color: white;
+                    font-size: 0.8em;
+                    font-weight: bold;
+                }
+                .urgency-level {
+                    padding: 3px 8px;
+                    border-radius: 10px;
+                    color: white;
+                    font-size: 0.7em;
+                }
+                .urgency-1 { background: #28a745; }
+                .urgency-2 { background: #ffc107; color: #333; }
+                .urgency-3 { background: #dc3545; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>🚨 Disaster Analysis Dashboard</h1>
+                    <p>Real-time disaster monitoring and analysis system</p>
+                    <p>Last Updated: 2025-08-23 02:06:41</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Total Disasters</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">Disaster Types</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">Regions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">50.0%</div>
+                        <div class="stat-label">Avg Confidence</div>
+                    </div>
+                </div>
+                
+                <div class="charts-container">
+                    <div class="chart-grid">
+                        <div class="chart-card">
+                            <div class="chart-title">📊 Disasters by Type</div>
+                            <canvas id="disasterTypeChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-title">🌍 Disasters by Region</div>
+                            <canvas id="regionChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-title">📈 Monthly Trend</div>
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-title">⚡ Urgency Levels</div>
+                            <canvas id="urgencyChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th>Urgency</th>
+                                    <th>Confidence</th>
+                                    <th>Author</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+            <tr>
+                <td>2025-08-23</td>
+                <td><span class="disaster-type" style="background-color: #B8B8B8">UNKNOWN</span></td>
+                <td title="Unknown Location">Unknown Location</td>
+                <td><span class="urgency-level urgency-2">Level 2</span></td>
+                <td>50%</td>
+                <td>system</td>
+            </tr>
+            
+            <tr>
+                <td>2025-08-23</td>
+                <td><span class="disaster-type" style="background-color: #B8B8B8">UNKNOWN</span></td>
+                <td title="Unknown Location">Unknown Location</td>
+                <td><span class="urgency-level urgency-2">Level 2</span></td>
+                <td>50%</td>
+                <td>system</td>
+            </tr>
+            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                
+        // Disaster Types Chart
+        const ctx1 = document.getElementById('disasterTypeChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['unknown'],
+                datasets: [{
+                    data: [2],
+                    backgroundColor: [
+                        '#FF6B6B', '#4ECDC4', '#FF8C42', '#A8E6CF', '#FFD93D', 
+                        '#6C5B7B', '#88D8B0', '#FFAAA5', '#FF6B9D', '#95E1D3'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        
+        // Regions Chart
+        const ctx2 = document.getElementById('regionChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['unknown'],
+                datasets: [{
+                    label: 'Count',
+                    data: [2],
+                    backgroundColor: '#4ECDC4'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Monthly Trend Chart
+        const ctx3 = document.getElementById('trendChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: ['2025-08'],
+                datasets: [{
+                    label: 'Disasters',
+                    data: [2],
+                    borderColor: '#FF6B6B',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Urgency Chart
+        const ctx4 = document.getElementById('urgencyChart').getContext('2d');
+        new Chart(ctx4, {
+            type: 'pie',
+            data: {
+                labels: ['Level 1', 'Level 2', 'Level 3'],
+                datasets: [{
+                    data: [0, 2, 0],
+                    backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        
+            </script>
+        </body>
+        </html>
+        

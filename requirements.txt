@@ -1,0 +1,63 @@
+# Requirements for Enhanced Social Media Disaster Alert System
+
+# Core Dependencies
+python-dotenv>=1.0.0
+requests>=2.31.0
+pandas>=2.0.0
+numpy>=1.24.0
+
+# AI and NLP
+google-genai>=0.3.0
+google-generativeai>=0.3.2
+
+# Social Media APIs
+praw>=7.7.0  # Reddit API
+tweepy>=4.14.0  # Twitter API
+pyTelegramBotAPI>=4.12.0  # Telegram Bot
+
+# Database
+sqlite3  # Built-in with Python
+sqlalchemy>=2.0.0  # Optional: for advanced database operations
+
+# Enhanced Notifications with Twilio
+twilio>=8.5.0  # For WhatsApp and SMS via Twilio
+pywhatkit>=5.4  # Alternative WhatsApp method
+geopy>=2.3.0  # Geographic calculations
+
+# Visualization and Dashboard
+matplotlib>=3.7.0
+plotly>=5.15.0
+seaborn>=0.12.0
+streamlit>=1.25.0
+folium>=0.14.0
+streamlit-folium>=0.13.0
+altair>=5.0.0
+
+# Web Framework and APIs
+flask>=2.3.0
+flask-cors>=4.0.0
+werkzeug>=2.3.0
+
+# Real-time Data Scraping
+feedparser>=6.0.10  # RSS feed parsing
+beautifulsoup4>=4.12.2  # Web scraping
+lxml>=4.9.3  # XML/HTML parsing
+urllib3>=2.0.4  # HTTP client
+
+# WebSocket Support
+websockets>=11.0.0
+
+# Date and Time
+pytz>=2023.3
+
+# Enhanced Features
+geocoder>=1.38.1  # For better geolocation
+textblob>=0.17.1  # For sentiment analysis
+langdetect>=1.0.9  # For language detection
+schedule>=1.2.0  # For task scheduling
+gunicorn>=21.2.0  # For production deployment
+
+# Development and Testing
+pytest>=7.4.0
+black>=23.7.0  # Code formatting
+flake8>=6.0.0  # Code linting
