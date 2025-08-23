@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_2dc02f1813fca1a62c337f48e76afbfe {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="position: fixed; 
+                bottom: 30px; left: 30px; width: 180px; 
+                background-color: white; border: 2px solid #2E86AB; z-index: 9999; 
+                font-size: 12px; padding: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+    <h4 style="margin-top: 0; color: #2E86AB; text-align: center;">Disaster Map</h4>
+    <div><span style="color: red;">●</span> High Priority (3/3)</div>
+    <div><span style="color: orange;">●</span> Moderate (2/3)</div>
+    <div><span style="color: green;">●</span> Low Priority (1/3)</div>
+    <hr style="margin: 8px 0;">
+    <div style="font-size: 10px; text-align: center;">
+        <strong>16 Total Disasters</strong><br>
+        6 Database + 10 Demo
+    </div>
+    </div>
+    
+    
+            <div class="folium-map" id="map_2dc02f1813fca1a62c337f48e76afbfe" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_2dc02f1813fca1a62c337f48e76afbfe = L.map(
+                "map_2dc02f1813fca1a62c337f48e76afbfe",
+                {
+                    center: [20.5937, 78.9629],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 5,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_eaa8ec40bba9f432474b135030cd6942 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_eaa8ec40bba9f432474b135030cd6942.addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var marker_46f9db372e9df8206ae81a46960a4424 = L.marker(
+                [-58.5, -62.0],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_5ad2c9fcfa68bd7297d2a3fc53887577 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "fire",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1810905309069dbebe515fb8081e8265 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_af4405151f9bf09725b7f07c5394f045 = $(`<div id="html_af4405151f9bf09725b7f07c5394f045" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Drake Passage                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #FF6B35; color: white; padding: 8px; border-radius: 5px;">                             <strong>Earthquake</strong>                         </div>                         <div style="text-align: center; background: #f39c12; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 2/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 8/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Powerful 7.5-Magnitude Earthquake Shakes Drake Passage, No T...</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Database</p>                 </div>             </div>             </div>`)[0];
+                popup_1810905309069dbebe515fb8081e8265.setContent(html_af4405151f9bf09725b7f07c5394f045);
+            
+        
+
+        marker_46f9db372e9df8206ae81a46960a4424.bindPopup(popup_1810905309069dbebe515fb8081e8265)
+        ;
+
+        
+    
+    
+            marker_46f9db372e9df8206ae81a46960a4424.bindTooltip(
+                `<div>
+                     Earthquake in Drake Passage (Urgency: 2/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_46f9db372e9df8206ae81a46960a4424.setIcon(icon_5ad2c9fcfa68bd7297d2a3fc53887577);
+            
+    
+            var marker_0cbaface46f4dad57062bf96eb3fd10e = L.marker(
+                [38.5797, -122.5808],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_c202e9cb2f925890cd806cc4d53f3979 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_61ea15149cac3c2a19e31fe941d4d92f = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_74470557bdf31d7905b8fa19b530eadf = $(`<div id="html_74470557bdf31d7905b8fa19b530eadf" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Calistoga, Napa County, USA                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #E53935; color: white; padding: 8px; border-radius: 5px;">                             <strong>Fire</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 9/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Rapidly Spreading Pickett Fire Sparks Evacuations in Napa Va...</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Database</p>                 </div>             </div>             </div>`)[0];
+                popup_61ea15149cac3c2a19e31fe941d4d92f.setContent(html_74470557bdf31d7905b8fa19b530eadf);
+            
+        
+
+        marker_0cbaface46f4dad57062bf96eb3fd10e.bindPopup(popup_61ea15149cac3c2a19e31fe941d4d92f)
+        ;
+
+        
+    
+    
+            marker_0cbaface46f4dad57062bf96eb3fd10e.bindTooltip(
+                `<div>
+                     Fire in Calistoga, Napa County, USA (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_0cbaface46f4dad57062bf96eb3fd10e.setIcon(icon_c202e9cb2f925890cd806cc4d53f3979);
+            
+    
+            var marker_8b34ab93990a78fb84bccb55e6edbe7a = L.marker(
+                [31.0189, 78.4501],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_57ebd14c50a9f535ffd1ae3e56a4f854 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e9799f488c2902d11b31f67bfc990b39 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_8bc93dd40946d8a2edc4c6db51f581ea = $(`<div id="html_8bc93dd40946d8a2edc4c6db51f581ea" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Dharali, Uttarkashi, India                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #1E88E5; color: white; padding: 8px; border-radius: 5px;">                             <strong>Flood</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 9/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Himalayan Hamlet Engulfed: Hundreds Missing After Flash Floo...</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Database</p>                 </div>             </div>             </div>`)[0];
+                popup_e9799f488c2902d11b31f67bfc990b39.setContent(html_8bc93dd40946d8a2edc4c6db51f581ea);
+            
+        
+
+        marker_8b34ab93990a78fb84bccb55e6edbe7a.bindPopup(popup_e9799f488c2902d11b31f67bfc990b39)
+        ;
+
+        
+    
+    
+            marker_8b34ab93990a78fb84bccb55e6edbe7a.bindTooltip(
+                `<div>
+                     Flood in Dharali, Uttarkashi, India (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_8b34ab93990a78fb84bccb55e6edbe7a.setIcon(icon_57ebd14c50a9f535ffd1ae3e56a4f854);
+            
+    
+            var marker_aad10290762d3237866292f3c497f367 = L.marker(
+                [39.9042, 116.4074],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_9db993a524bfb9d9a4675922204fd8fa = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bbda040927c2aced5591f49447b8a9ac = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_65bc4e7b4c74ec76b028b1bdf37a8ac8 = $(`<div id="html_65bc4e7b4c74ec76b028b1bdf37a8ac8" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Beijing, China                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #1E88E5; color: white; padding: 8px; border-radius: 5px;">                             <strong>Flood</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 9/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Beijing Mourns 44 Dead After Unprecedented Flash Floods</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Database</p>                 </div>             </div>             </div>`)[0];
+                popup_bbda040927c2aced5591f49447b8a9ac.setContent(html_65bc4e7b4c74ec76b028b1bdf37a8ac8);
+            
+        
+
+        marker_aad10290762d3237866292f3c497f367.bindPopup(popup_bbda040927c2aced5591f49447b8a9ac)
+        ;
+
+        
+    
+    
+            marker_aad10290762d3237866292f3c497f367.bindTooltip(
+                `<div>
+                     Flood in Beijing, China (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_aad10290762d3237866292f3c497f367.setIcon(icon_9db993a524bfb9d9a4675922204fd8fa);
+            
+    
+            var marker_713ecceb3a6f0e384206877294356f3f = L.marker(
+                [19.1073, 72.925],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_30e5cf705afe2201bcfb648c336b602d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e59bda56584a1df3f4950e727471b77a = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_9ac77e4d97eefcf598e2e5e5f8c40c9b = $(`<div id="html_9ac77e4d97eefcf598e2e5e5f8c40c9b" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Vikhroli, Mumbai, India                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #43A047; color: white; padding: 8px; border-radius: 5px;">                             <strong>Other</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 9/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Landslide Tragedy Claims Father and Daughter in Mumbai</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Database</p>                 </div>             </div>             </div>`)[0];
+                popup_e59bda56584a1df3f4950e727471b77a.setContent(html_9ac77e4d97eefcf598e2e5e5f8c40c9b);
+            
+        
+
+        marker_713ecceb3a6f0e384206877294356f3f.bindPopup(popup_e59bda56584a1df3f4950e727471b77a)
+        ;
+
+        
+    
+    
+            marker_713ecceb3a6f0e384206877294356f3f.bindTooltip(
+                `<div>
+                     Other in Vikhroli, Mumbai, India (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_713ecceb3a6f0e384206877294356f3f.setIcon(icon_30e5cf705afe2201bcfb648c336b602d);
+            
+    
+            var marker_dada4b255b5c441d673021a91938f3a8 = L.marker(
+                [39.9042, 116.4074],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_46a3143bb87a9e4529bf73a68b899fd5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_486ac37cc92856c8196bedabe02a5ec1 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_859469615282f9c926314739b50cea7f = $(`<div id="html_859469615282f9c926314739b50cea7f" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Beijing, China                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #1E88E5; color: white; padding: 8px; border-radius: 5px;">                             <strong>Flood</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 9/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Beijing Mourns 44 Dead After Unprecedented Flash Floods</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> Few-Penalty-2711</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Database</p>                 </div>             </div>             </div>`)[0];
+                popup_486ac37cc92856c8196bedabe02a5ec1.setContent(html_859469615282f9c926314739b50cea7f);
+            
+        
+
+        marker_dada4b255b5c441d673021a91938f3a8.bindPopup(popup_486ac37cc92856c8196bedabe02a5ec1)
+        ;
+
+        
+    
+    
+            marker_dada4b255b5c441d673021a91938f3a8.bindTooltip(
+                `<div>
+                     Flood in Beijing, China (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_dada4b255b5c441d673021a91938f3a8.setIcon(icon_46a3143bb87a9e4529bf73a68b899fd5);
+            
+    
+            var marker_f24f22cab0ed199672810882c719788d = L.marker(
+                [19.1197, 72.8697],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_092fb2d679d8add4af4d9fa6011d38f9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e608fd64c5f18ad2cd0a4bee30d04d17 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_fdccd2b992daac60bd33e259f9b2d888 = $(`<div id="html_fdccd2b992daac60bd33e259f9b2d888" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Andheri East, Mumbai                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #1E88E5; color: white; padding: 8px; border-radius: 5px;">                             <strong>Flood</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 9/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Mumbai Flooding Emergency</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @mumbai_citizen</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_e608fd64c5f18ad2cd0a4bee30d04d17.setContent(html_fdccd2b992daac60bd33e259f9b2d888);
+            
+        
+
+        marker_f24f22cab0ed199672810882c719788d.bindPopup(popup_e608fd64c5f18ad2cd0a4bee30d04d17)
+        ;
+
+        
+    
+    
+            marker_f24f22cab0ed199672810882c719788d.bindTooltip(
+                `<div>
+                     Flood in Andheri East, Mumbai (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f24f22cab0ed199672810882c719788d.setIcon(icon_092fb2d679d8add4af4d9fa6011d38f9);
+            
+    
+            var marker_318fd65dbfacee14be6fde2a93ed5a53 = L.marker(
+                [13.0827, 80.2707],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_4eb63ddb0e222f2e65de94af6ffbf04f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_72defcf5fe4468918ba3f7e788fe3f97 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_fe50444598d66059333f8eb3d8595476 = $(`<div id="html_fe50444598d66059333f8eb3d8595476" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Marina Beach, Chennai                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #8E24AA; color: white; padding: 8px; border-radius: 5px;">                             <strong>Storm</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 9/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Chennai Cyclone Alert</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @chennai_alert</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_72defcf5fe4468918ba3f7e788fe3f97.setContent(html_fe50444598d66059333f8eb3d8595476);
+            
+        
+
+        marker_318fd65dbfacee14be6fde2a93ed5a53.bindPopup(popup_72defcf5fe4468918ba3f7e788fe3f97)
+        ;
+
+        
+    
+    
+            marker_318fd65dbfacee14be6fde2a93ed5a53.bindTooltip(
+                `<div>
+                     Storm in Marina Beach, Chennai (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_318fd65dbfacee14be6fde2a93ed5a53.setIcon(icon_4eb63ddb0e222f2e65de94af6ffbf04f);
+            
+    
+            var marker_f38547bbdb3930ab36b9b007bac24d61 = L.marker(
+                [28.6519, 77.1909],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_74c23edba514f45b0e80d36cdc299ee2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d7e36e82d1a1ed115d5338e617279842 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_e9ac154ce3d236d496cde64e39c3c203 = $(`<div id="html_e9ac154ce3d236d496cde64e39c3c203" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Karol Bagh, New Delhi                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #E53935; color: white; padding: 8px; border-radius: 5px;">                             <strong>Fire</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 8/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Delhi Market Fire</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @delhi_smoke</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_d7e36e82d1a1ed115d5338e617279842.setContent(html_e9ac154ce3d236d496cde64e39c3c203);
+            
+        
+
+        marker_f38547bbdb3930ab36b9b007bac24d61.bindPopup(popup_d7e36e82d1a1ed115d5338e617279842)
+        ;
+
+        
+    
+    
+            marker_f38547bbdb3930ab36b9b007bac24d61.bindTooltip(
+                `<div>
+                     Fire in Karol Bagh, New Delhi (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f38547bbdb3930ab36b9b007bac24d61.setIcon(icon_74c23edba514f45b0e80d36cdc299ee2);
+            
+    
+            var marker_407a5290d20b30ef30266db142cf0bd4 = L.marker(
+                [12.8456, 77.6603],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_f160ac143932a0ffac486c15feb9dd4d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "fire",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5bf2bd0608f560e1cef73e15005ecd45 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_e6634d6f5cbf18a523ac0b33d489ba62 = $(`<div id="html_e6634d6f5cbf18a523ac0b33d489ba62" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Electronic City, Bangalore                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #FF9800; color: white; padding: 8px; border-radius: 5px;">                             <strong>Landslide</strong>                         </div>                         <div style="text-align: center; background: #f39c12; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 2/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 8/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Bangalore Landslide Warning</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @bengaluru_resident</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_5bf2bd0608f560e1cef73e15005ecd45.setContent(html_e6634d6f5cbf18a523ac0b33d489ba62);
+            
+        
+
+        marker_407a5290d20b30ef30266db142cf0bd4.bindPopup(popup_5bf2bd0608f560e1cef73e15005ecd45)
+        ;
+
+        
+    
+    
+            marker_407a5290d20b30ef30266db142cf0bd4.bindTooltip(
+                `<div>
+                     Landslide in Electronic City, Bangalore (Urgency: 2/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_407a5290d20b30ef30266db142cf0bd4.setIcon(icon_f160ac143932a0ffac486c15feb9dd4d);
+            
+    
+            var marker_88c4887ca75a5b0fdf90f13643bde108 = L.marker(
+                [18.5204, 73.8567],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_bc8d4e61e8e0ad86372ecbe967595efd = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "fire",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_cabe2cfb2dd015c9da62e2627caa6a16 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_137efbe0713ac8a537b6b0f8ddb03f74 = $(`<div id="html_137efbe0713ac8a537b6b0f8ddb03f74" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Pune City, Maharashtra                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #FF6B35; color: white; padding: 8px; border-radius: 5px;">                             <strong>Earthquake</strong>                         </div>                         <div style="text-align: center; background: #f39c12; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 2/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 7/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Pune Earthquake Alert</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @pune_emergency</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_cabe2cfb2dd015c9da62e2627caa6a16.setContent(html_137efbe0713ac8a537b6b0f8ddb03f74);
+            
+        
+
+        marker_88c4887ca75a5b0fdf90f13643bde108.bindPopup(popup_cabe2cfb2dd015c9da62e2627caa6a16)
+        ;
+
+        
+    
+    
+            marker_88c4887ca75a5b0fdf90f13643bde108.bindTooltip(
+                `<div>
+                     Earthquake in Pune City, Maharashtra (Urgency: 2/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_88c4887ca75a5b0fdf90f13643bde108.setIcon(icon_bc8d4e61e8e0ad86372ecbe967595efd);
+            
+    
+            var marker_fe0b9baf8b9ede9af6a421e6c243e4b1 = L.marker(
+                [22.5726, 88.3639],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_c3c7e69fb473d4bd4fc08e03c9a8bf4b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0e25f743188df6c7f88fa3e59f545064 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_bb22db67cfa846d45cd882a17bfcf519 = $(`<div id="html_bb22db67cfa846d45cd882a17bfcf519" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Howrah Bridge, Kolkata                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #43A047; color: white; padding: 8px; border-radius: 5px;">                             <strong>Other</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 8/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Kolkata Bridge Collapse</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @kolkata_witness</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_0e25f743188df6c7f88fa3e59f545064.setContent(html_bb22db67cfa846d45cd882a17bfcf519);
+            
+        
+
+        marker_fe0b9baf8b9ede9af6a421e6c243e4b1.bindPopup(popup_0e25f743188df6c7f88fa3e59f545064)
+        ;
+
+        
+    
+    
+            marker_fe0b9baf8b9ede9af6a421e6c243e4b1.bindTooltip(
+                `<div>
+                     Other in Howrah Bridge, Kolkata (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_fe0b9baf8b9ede9af6a421e6c243e4b1.setIcon(icon_c3c7e69fb473d4bd4fc08e03c9a8bf4b);
+            
+    
+            var marker_6c42283aff5a87a085086b422a9478cd = L.marker(
+                [17.4239, 78.4738],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_2927da7021c55bf1beaaba619fd224ad = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7aae98dd0b18308bac9a2bfca2f60c35 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_47d5d45ca9192faf03ddb1dceaecb9cf = $(`<div id="html_47d5d45ca9192faf03ddb1dceaecb9cf" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Hussain Sagar, Hyderabad                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #1E88E5; color: white; padding: 8px; border-radius: 5px;">                             <strong>Flood</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 8/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Hyderabad Flash Floods</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @hyderabad_floods</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_7aae98dd0b18308bac9a2bfca2f60c35.setContent(html_47d5d45ca9192faf03ddb1dceaecb9cf);
+            
+        
+
+        marker_6c42283aff5a87a085086b422a9478cd.bindPopup(popup_7aae98dd0b18308bac9a2bfca2f60c35)
+        ;
+
+        
+    
+    
+            marker_6c42283aff5a87a085086b422a9478cd.bindTooltip(
+                `<div>
+                     Flood in Hussain Sagar, Hyderabad (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6c42283aff5a87a085086b422a9478cd.setIcon(icon_2927da7021c55bf1beaaba619fd224ad);
+            
+    
+            var marker_1edcd560db6f07a86bc89c916b7d020a = L.marker(
+                [11.6854, 76.132],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_b5c489e861af0cc82c78323c7fd5ebd0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9a8802a0af35a4a899d932dd1ac3b2c7 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_56676b547473ed30d52826fc8b57219d = $(`<div id="html_56676b547473ed30d52826fc8b57219d" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Wayanad, Kerala                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #FF9800; color: white; padding: 8px; border-radius: 5px;">                             <strong>Landslide</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 9/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Kerala Landslides</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @kerala_floods</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_9a8802a0af35a4a899d932dd1ac3b2c7.setContent(html_56676b547473ed30d52826fc8b57219d);
+            
+        
+
+        marker_1edcd560db6f07a86bc89c916b7d020a.bindPopup(popup_9a8802a0af35a4a899d932dd1ac3b2c7)
+        ;
+
+        
+    
+    
+            marker_1edcd560db6f07a86bc89c916b7d020a.bindTooltip(
+                `<div>
+                     Landslide in Wayanad, Kerala (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_1edcd560db6f07a86bc89c916b7d020a.setIcon(icon_b5c489e861af0cc82c78323c7fd5ebd0);
+            
+    
+            var marker_2455f7060672bf46a8cf6f39249d07f3 = L.marker(
+                [21.627, 73.0151],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_2f3b153c28e183a4f34e79fed5475c84 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_23251857f2b18bd825f096c130aa7da5 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_7f426ca9decda0de9ac2679b7544a2a3 = $(`<div id="html_7f426ca9decda0de9ac2679b7544a2a3" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Ankleshwar, Gujarat                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #43A047; color: white; padding: 8px; border-radius: 5px;">                             <strong>Other</strong>                         </div>                         <div style="text-align: center; background: #e74c3c; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 3/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 8/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Gujarat Chemical Leak</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @gujarat_emergency</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_23251857f2b18bd825f096c130aa7da5.setContent(html_7f426ca9decda0de9ac2679b7544a2a3);
+            
+        
+
+        marker_2455f7060672bf46a8cf6f39249d07f3.bindPopup(popup_23251857f2b18bd825f096c130aa7da5)
+        ;
+
+        
+    
+    
+            marker_2455f7060672bf46a8cf6f39249d07f3.bindTooltip(
+                `<div>
+                     Other in Ankleshwar, Gujarat (Urgency: 3/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_2455f7060672bf46a8cf6f39249d07f3.setIcon(icon_2f3b153c28e183a4f34e79fed5475c84);
+            
+    
+            var marker_f7ba34943b01c7b72584f297b779763a = L.marker(
+                [26.2389, 73.0243],
+                {
+}
+            ).addTo(map_2dc02f1813fca1a62c337f48e76afbfe);
+        
+    
+            var icon_a6a642a955aa621c90c5a361b456a511 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "fire",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_80d387bed976fc0c99bb3cb017092264 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_9df4c59909bee076876b6d0d0bd4b57b = $(`<div id="html_9df4c59909bee076876b6d0d0bd4b57b" style="width: 100.0%; height: 100.0%;">             <div style="width: 320px; font-family: Arial; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin: -15px;">                 <h3 style="margin: 0 0 15px 0; color: #fff; text-align: center;">                     Jodhpur, Rajasthan                 </h3>                                  <div style="background: rgba(255,255,255,0.9); color: #333; padding: 15px; border-radius: 10px; margin-bottom: 15px;">                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">                         <div style="text-align: center; background: #43A047; color: white; padding: 8px; border-radius: 5px;">                             <strong>Other</strong>                         </div>                         <div style="text-align: center; background: #f39c12; color: white; padding: 8px; border-radius: 5px;">                             Urgency: 2/3                         </div>                     </div>                                          <div style="text-align: center; background: #3498db; color: white; padding: 8px; border-radius: 5px; margin-bottom: 10px;">                         Confidence: 7/10                     </div>                 </div>                                  <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; font-size: 13px;">                     <p style="margin: 5px 0;"><strong>Title:</strong> Rajasthan Heat Wave</p>                     <p style="margin: 5px 0;"><strong>Author:</strong> @rajasthan_heat</p>                     <p style="margin: 5px 0;"><strong>Type:</strong> Demo Data</p>                 </div>             </div>             </div>`)[0];
+                popup_80d387bed976fc0c99bb3cb017092264.setContent(html_9df4c59909bee076876b6d0d0bd4b57b);
+            
+        
+
+        marker_f7ba34943b01c7b72584f297b779763a.bindPopup(popup_80d387bed976fc0c99bb3cb017092264)
+        ;
+
+        
+    
+    
+            marker_f7ba34943b01c7b72584f297b779763a.bindTooltip(
+                `<div>
+                     Other in Jodhpur, Rajasthan (Urgency: 2/3)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f7ba34943b01c7b72584f297b779763a.setIcon(icon_a6a642a955aa621c90c5a361b456a511);
+            
+</script>
+</html>
